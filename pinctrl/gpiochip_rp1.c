@@ -343,12 +343,12 @@ static GPIO_LEVEL_T rp1_gpio_get_level(void *priv, unsigned gpio)
     int bank, offset;
     uint32_t pad_reg;
     uint32_t reg;
-    int level;
+    GPIO_LEVEL_T level;
 
     rp1_gpio_get_bank(gpio, &bank, &offset);
     pad_reg = rp1_gpio_pads_read(base, bank, offset);
     if (!(pad_reg & RP1_PADS_IE_SET))
-	return -1;
+        return LEVEL_MAX;
     reg = rp1_gpio_sys_rio_sync_in_read(base, bank, offset);
     level = (reg & (1U << offset)) ? LEVEL_HIGH : LEVEL_LOW;
 
