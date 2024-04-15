@@ -397,7 +397,7 @@ const char *gpio_get_level_name(GPIO_LEVEL_T level)
 {
     if ((unsigned)level < ARRAY_SIZE(level_names))
         return level_names[level];
-    return NULL;
+    return level_names[LEVEL_MAX];
 }
 
 static const GPIO_CHIP_T *gpio_find_chip(const char *name)
