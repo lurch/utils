@@ -39,6 +39,7 @@ static unsigned hdr_gpios[NUM_HDR_PINS + 1];
 
 const char *pull_names[] = { "pn", "pd", "pu", "--" };
 const char *drive_names[] = { "dl", "dh", "--" };
+const char *level_names[] = { "lo", "hi", "--" };
 const char *fsel_names[] =
 {
     "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7",
@@ -192,7 +193,7 @@ void gpio_clear(unsigned gpio)
     }
 }
 
-int gpio_get_level(unsigned gpio)
+GPIO_LEVEL_T gpio_get_level(unsigned gpio)
 {
     const GPIO_CHIP_INTERFACE_T *iface = NULL;
     unsigned gpio_offset;
@@ -200,7 +201,7 @@ int gpio_get_level(unsigned gpio)
 
     if (gpio_get_interface(gpio, &iface, &priv, &gpio_offset) == 0)
         return iface->gpio_get_level(priv, gpio_offset);
-    return 0;
+    return LEVEL_MAX;
 }
 
 GPIO_DRIVE_T gpio_get_drive(unsigned gpio)
@@ -389,6 +390,13 @@ const char *gpio_get_drive_name(GPIO_DRIVE_T drive)
 {
     if ((unsigned)drive < ARRAY_SIZE(drive_names))
         return drive_names[drive];
+    return NULL;
+}
+
+const char *gpio_get_level_name(GPIO_LEVEL_T level)
+{
+    if ((unsigned)level < ARRAY_SIZE(level_names))
+        return level_names[level];
     return NULL;
 }
 

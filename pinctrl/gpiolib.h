@@ -54,6 +54,13 @@ typedef enum
     DRIVE_MAX
 } GPIO_DRIVE_T;
 
+typedef enum
+{
+    LEVEL_LOW,
+    LEVEL_HIGH,
+    LEVEL_MAX
+} GPIO_LEVEL_T;
+
 int gpiolib_init(void);
 int gpiolib_init_by_name(const char *name);
 int gpiolib_mmap(void);
@@ -67,7 +74,7 @@ void gpio_set_fsel(unsigned gpio, const GPIO_FSEL_T func);
 void gpio_set_drive(unsigned gpio, GPIO_DRIVE_T drv);
 void gpio_set(unsigned gpio);
 void gpio_clear(unsigned gpio);
-int gpio_get_level(unsigned gpio);  /* The actual level observed */
+GPIO_LEVEL_T gpio_get_level(unsigned gpio);  /* The actual level observed */
 GPIO_DRIVE_T gpio_get_drive(unsigned gpio);  /* What it is being driven as */
 GPIO_PULL_T gpio_get_pull(unsigned gpio);
 void gpio_set_pull(unsigned gpio, GPIO_PULL_T pull);
@@ -81,5 +88,6 @@ const char *gpio_get_gpio_fsel_name(unsigned gpio, GPIO_FSEL_T fsel);
 const char *gpio_get_fsel_name(GPIO_FSEL_T fsel);
 const char *gpio_get_pull_name(GPIO_PULL_T pull);
 const char *gpio_get_drive_name(GPIO_DRIVE_T drive);
+const char *gpio_get_level_name(GPIO_LEVEL_T level);
 
 #endif

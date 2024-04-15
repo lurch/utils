@@ -230,14 +230,14 @@ static void bcm2835_gpio_set_dir(void *priv, unsigned gpio, GPIO_DIR_T dir)
     bcm2835_gpio_set_fsel(priv, gpio, fsel);
 }
 
-static int bcm2835_gpio_get_level(void *priv, unsigned gpio)
+static GPIO_LEVEL_T bcm2835_gpio_get_level(void *priv, unsigned gpio)
 {
     volatile uint32_t *base = priv;
 
     if (gpio >= BCM2835_NUM_GPIOS)
-        return -1;
+        return LEVEL_MAX;
 
-    return (base[GPLEV0 + (gpio / 32)] >> (gpio % 32)) & 1;
+    return ((base[GPLEV0 + (gpio / 32)] >> (gpio % 32)) & 1) ? LEVEL_HIGH : LEVEL_LOW;
 }
 
 GPIO_DRIVE_T bcm2835_gpio_get_drive(void *priv, unsigned gpio)

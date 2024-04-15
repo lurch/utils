@@ -28,7 +28,7 @@ struct GPIO_CHIP_INTERFACE_
     void (*gpio_set_drive)(void *priv, uint32_t gpio, GPIO_DRIVE_T drv);
     void (*gpio_set_dir)(void *priv, uint32_t gpio, GPIO_DIR_T dir);
     GPIO_DIR_T (*gpio_get_dir)(void *priv, uint32_t gpio);
-    int (*gpio_get_level)(void *priv, uint32_t gpio);  /* The actual level observed */
+    GPIO_LEVEL_T (*gpio_get_level)(void *priv, uint32_t gpio);  /* The actual level observed */
     GPIO_DRIVE_T (*gpio_get_drive)(void *priv, uint32_t gpio);  /* What it is being driven as */
     GPIO_PULL_T (*gpio_get_pull)(void *priv, uint32_t gpio);
     void (*gpio_set_pull)(void *priv, uint32_t gpio, GPIO_PULL_T pull);

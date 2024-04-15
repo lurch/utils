@@ -326,16 +326,16 @@ static volatile uint32_t *bcm2712_pad_base(struct bcm2712_inst *inst,
     return inst->pinmux_base + (gpio / 15);
 }
 
-static int bcm2712_gpio_get_level(void *priv, unsigned gpio)
+static GPIO_LEVEL_T bcm2712_gpio_get_level(void *priv, unsigned gpio)
 {
     struct bcm2712_inst *inst = priv;
     unsigned int bit;
     volatile uint32_t *gpio_base = bcm2712_gpio_base(inst, gpio, &bit);
 
     if (!gpio_base)
-        return -1;
+        return LEVEL_MAX;
 
-    return !!(gpio_base[BCM2712_GIO_DATA / 4] & (1 << bit));
+    return !!(gpio_base[BCM2712_GIO_DATA / 4] & (1 << bit)) ? LEVEL_HIGH : LEVEL_LOW;
 }
 
 static void bcm2712_gpio_set_drive(void *priv, unsigned gpio, GPIO_DRIVE_T drv)

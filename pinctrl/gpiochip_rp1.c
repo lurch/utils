@@ -337,7 +337,7 @@ static void rp1_gpio_set_fsel(void *priv, unsigned gpio, const GPIO_FSEL_T func)
         rp1_gpio_pads_write(base, bank, offset, pad_reg);
 }
 
-static int rp1_gpio_get_level(void *priv, unsigned gpio)
+static GPIO_LEVEL_T rp1_gpio_get_level(void *priv, unsigned gpio)
 {
     volatile uint32_t *base = priv;
     int bank, offset;
@@ -350,7 +350,7 @@ static int rp1_gpio_get_level(void *priv, unsigned gpio)
     if (!(pad_reg & RP1_PADS_IE_SET))
 	return -1;
     reg = rp1_gpio_sys_rio_sync_in_read(base, bank, offset);
-    level = (reg & (1U << offset)) ? 1 : 0;
+    level = (reg & (1U << offset)) ? LEVEL_HIGH : LEVEL_LOW;
 
     return level;
 }

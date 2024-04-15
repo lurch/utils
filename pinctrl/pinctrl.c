@@ -22,7 +22,7 @@ struct poll_gpio_state {
     unsigned int num;
     unsigned int gpio;
     const char *name;
-    int level;
+    GPIO_LEVEL_T level;
 };
 
 int num_poll_gpios;
@@ -123,7 +123,6 @@ static int do_gpio_get(unsigned int gpio)
     unsigned int num = gpio;
     const char *name;
     int fsel;
-    int level;
 
     if (pin_mode)
     {
@@ -156,11 +155,9 @@ static int do_gpio_get(unsigned int gpio)
     if (pin_mode && strchr(name, '/'))
         name = strchr(name, '/') + 1;
 
-    level = gpio_get_level(gpio);
-
     printf(" %s | %s // %s%s%s\n",
            gpio_get_pull_name(gpio_get_pull(gpio)),
-           (level == 1) ? "hi" : (level == 0) ? "lo" : "--",
+           gpio_get_level_name(gpio_get_level(gpio)),
            name ? name : "",
            name ? " = " : "",
            gpio_get_gpio_fsel_name(gpio, fsel));
@@ -226,7 +223,7 @@ static int do_gpio_poll_add(unsigned int gpio)
     new_gpio->num = num;
     new_gpio->gpio = gpio;
     new_gpio->name = gpio_get_name(gpio);
-    new_gpio->level = -1; /* Unknown */
+    new_gpio->level = LEVEL_MAX; /* Unknown */
     num_poll_gpios++;
 
     return 0;
@@ -244,7 +241,7 @@ static void do_gpio_poll(void)
         for (i = 0; i < num_poll_gpios; i++)
         {
             struct poll_gpio_state *state = &poll_gpios[i];
-            int level = gpio_get_level(state->gpio);
+            GPIO_LEVEL_T level = gpio_get_level(state->gpio);
             if (level != state->level)
             {
                 if (idle_count)
@@ -259,7 +256,7 @@ static void do_gpio_poll(void)
                     printf("+%" PRIu64 "us\n", interval_us);
                     idle_count = 0;
                 }
-                printf("%2d: %s // %s\n", state->num, level ? "hi" : "lo", state->name);
+                printf("%2d: %s // %s\n", state->num, gpio_get_level_name(level), state->name);
                 state->level = level;
                 changed = 1;
             }
